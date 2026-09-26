@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React from 'react';
 import { StudentProfile } from '../types';
-import { BookOpen, Award, CheckCircle2, Clock, LogOut, KeyRound, Sparkles, Compass, AlertCircle, Type, Check } from 'lucide-react';
+import { BookOpen, Award, CheckCircle2, Clock, LogOut, KeyRound, Sparkles, Compass, AlertCircle } from 'lucide-react';
 
 interface HeaderProps {
   student: StudentProfile | null;
@@ -10,12 +10,6 @@ interface HeaderProps {
   onLogout: () => void;
 }
 
-const FONT_OPTIONS = [
-  { id: 'tajawal', nameAr: 'خط تجوال', desc: 'عصري، مريح، وسلس للقراءة', fontClass: 'font-[Tajawal]' },
-  { id: 'almarai', nameAr: 'خط المراعي', desc: 'أكاديمي متزن وواضح للواجهات', fontClass: 'font-[Almarai]' },
-  { id: 'readex', nameAr: 'خط ريدكس', desc: 'هندسي حديث ومتناسق', fontClass: 'font-[Readex_Pro]' },
-];
-
 export const Header: React.FC<HeaderProps> = ({
   student,
   currentTab,
@@ -23,35 +17,6 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenAuth,
   onLogout,
 }) => {
-  const [activeFont, setActiveFont] = useState<string>('tajawal');
-  const [fontMenuOpen, setFontMenuOpen] = useState<boolean>(false);
-  const fontMenuRef = useRef<HTMLDivElement>(null);
-
-  // Initialize font preference
-  useEffect(() => {
-    const saved = localStorage.getItem('bienvenue_font_pref') || 'tajawal';
-    setActiveFont(saved);
-    document.documentElement.setAttribute('data-font', saved);
-  }, []);
-
-  const handleSelectFont = (fontId: string) => {
-    setActiveFont(fontId);
-    localStorage.setItem('bienvenue_font_pref', fontId);
-    document.documentElement.setAttribute('data-font', fontId);
-    setFontMenuOpen(false);
-  };
-
-  // Close dropdown on outside click
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (fontMenuRef.current && !fontMenuRef.current.contains(e.target as Node)) {
-        setFontMenuOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
   return (
     <header className="sticky top-0 z-40 bg-[#FAF8F5]/90 backdrop-blur-md border-b border-slate-200/80 transition-colors">
       {/* French Flag Tricolor Micro-Ribbon */}
@@ -149,54 +114,8 @@ export const Header: React.FC<HeaderProps> = ({
             </nav>
           )}
 
-          {/* Zone 3: Primary Actions / Font Switcher & Student Status */}
+          {/* Zone 3: Primary Actions & Student Status */}
           <div className="flex items-center gap-2 sm:gap-3">
-            
-            {/* Font Style Quick Selector */}
-            <div className="relative" ref={fontMenuRef}>
-              <button
-                onClick={() => setFontMenuOpen(!fontMenuOpen)}
-                title="تخصيص نوع الخط"
-                className={`p-2 rounded-xl text-xs font-medium border transition-colors flex items-center gap-1.5 cursor-pointer ${
-                  fontMenuOpen
-                    ? 'bg-[#0055A4]/10 border-[#0055A4]/30 text-[#0055A4]'
-                    : 'bg-white border-slate-200 text-slate-600 hover:bg-[#FAF8F5] hover:text-slate-900'
-                }`}
-              >
-                <Type className="w-4 h-4 text-[#0055A4]" />
-                <span className="hidden sm:inline text-[11px] font-bold font-ar">الخط</span>
-              </button>
-
-              {fontMenuOpen && (
-                <div className="absolute left-0 sm:right-auto sm:left-0 mt-2 w-64 bg-white rounded-2xl shadow-xl border border-slate-200 py-2 z-50 animate-in fade-in zoom-in-95 duration-100 text-right">
-                  <div className="px-3 py-1.5 border-b border-slate-100 text-[11px] font-bold text-slate-400">
-                    اختر الخط المفضل للمنصة
-                  </div>
-                  {FONT_OPTIONS.map((f) => (
-                    <button
-                      key={f.id}
-                      onClick={() => handleSelectFont(f.id)}
-                      className={`w-full px-3 py-2 text-right flex items-center justify-between transition-colors cursor-pointer hover:bg-[#FAF8F5] ${
-                        activeFont === f.id ? 'bg-[#0055A4]/5 text-[#0055A4]' : 'text-slate-700'
-                      }`}
-                    >
-                      <div className="space-y-0.5">
-                        <div className={`text-sm font-bold ${f.fontClass}`}>
-                          {f.nameAr}
-                        </div>
-                        <div className="text-[10px] text-slate-500">
-                          {f.desc}
-                        </div>
-                      </div>
-                      {activeFont === f.id && (
-                        <Check className="w-4 h-4 text-[#0055A4] shrink-0" />
-                      )}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-
             {student ? (
               <div className="flex items-center gap-2.5">
                 {student.plan === 'trial' ? (
