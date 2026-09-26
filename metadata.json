@@ -1,0 +1,6 @@
+{
+  "name": "BIENVENUE 3 - French Learning Platform",
+  "description": "Plateforme interactive d'apprentissage du français pour la 3ème année préparatoire - 1er semestre. رحلة تعليمية فرنسية راقية، نطق صوتي متقن، بنك أخطاء ذكي، وامتحانات رسمية.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
